@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+import sys
+import os
+
+# Отключаем sandbox — часто требуется в Linux
+os.environ["QTWEBENGINE_DISABLE_SANDBOX"] = "1"
+
+try:
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtWebEngineWidgets import QWebEngineView
+    from PyQt5.QtCore import QUrl, QCoreApplication
+except ImportError as e:
+    print("❌ Ошибка импорта:", e, file=sys.stderr)
+    print("💡 Установите: sudo apt install python3-pyqt5.qtwebengine", file=sys.stderr)
+    sys.exit(1)
+
+def main():
+    # Маскировка под Chrome
+    QCoreApplication.setApplicationName("Chrome")
+    QCoreApplication.setOrganizationName("Google Inc.")
+    
+    app = QApplication(sys.argv)
+    app.setApplicationName("Chrome")
+
+    view = QWebEngineView()
+    page = view.page()
+
+    # Настройка User-Agent
+    user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.119 Safari/537.36"
+    page.profile().setHttpUserAgent(user_agent)
+
+    # Включаем нужные фичи (они включены по умолчанию, но на всякий случай)
+    settings = page.settings()
+    settings.setAttribute(settings.JavascriptEnabled, True)
+    settings.setAttribute(settings.LocalStorageEnabled, True)
+    settings.setAttribute(settings.WebGLEnabled, True)
+
+    view.setWindowTitle("Qwen Browser")
+    view.resize(1100, 750)
+    view.setUrl(QUrl("https://chat.qwen.ai"))
+    view.show()
+
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()

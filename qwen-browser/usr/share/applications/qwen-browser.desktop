@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Qwen Browser
+Comment=Мини-браузер для Qwen AI
+Exec=qwen-browser
+Icon=qwen-browser
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;AI;
+StartupNotify=true
